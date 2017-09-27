@@ -3,17 +3,14 @@ class PokemonController < ApplicationController
 		respoke = HTTParty.get("http://pokeapi.co/api/v2/pokemon/#{params[:id]}/")
 		pokebody = JSON.parse(respoke.body)
 
-		id = pokebody ["id"]
+		id = pokebody ["id"],
 		name = pokebody["name"]
-		types = pokebody["types"]
-
+		types = pokebody["types"].map {|p|p["type"]["name"] } #for the current hash enter into the type key and grab the value located at the name key
+# types is an array of hashes when we use map we say "go to that array and pull out the string name of that type - we now get an array of strings"
 		resgif = HTTParty.get("https://api.giphy.com/v1/gifs/search?api_key=#{ENV["GIPHY_KEY"]}&q=#{name}&rating=g")
 		gifbody = JSON.parse(resgif.body)
-
 		gif_url = gifbody["data"][0]["url"]
-
-
-		render json: {name: name , types: types[0]["type"]["name"] , id: [id]}
+		render json: {name: name , id: [id] ,types: types}
 	end
 end
 
@@ -22,7 +19,7 @@ end
 #types[0]["type"] (is the 3rd level and within the/ is a hash)
 #["name"] is the final level and a value
 #
-# types": [
+# "types": [
 # 		{
 # 			"slot": 2,
 # 			"type": {
