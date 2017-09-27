@@ -3,7 +3,7 @@ class PokemonController < ApplicationController
 		respoke = HTTParty.get("http://pokeapi.co/api/v2/pokemon/#{params[:id]}/")
 		pokebody = JSON.parse(respoke.body)
 
-		resgif = HTTParty.get("https://api.giphy.com/v1/gifs/search?api_key=#{ENV["GIPHY_KEY"]}&q=pikachu&rating=g")
+		resgif = HTTParty.get("https://api.giphy.com/v1/gifs/search?api_key=#{ENV["GIPHY_KEY"]}&q=#{params[:name]}&rating=g")
 		gifbody = JSON.parse(resgif.body)
 
 
