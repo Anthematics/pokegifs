@@ -1,10 +1,17 @@
 class PokemonController < ApplicationController
-
 	def show
-		res = HTTParty.get("http://pokeapi.co/api/v2/pokemon/#{params[:id]}/")
-		body = JSON.parse(res.body)
-		name = body["name"]
+		respoke = HTTParty.get("http://pokeapi.co/api/v2/pokemon/#{params[:id]}/")
+		pokebody = JSON.parse(respoke.body)
 
-		render json: {"message": "ok"}
+		resgif = HTTParty.get("https://api.giphy.com/v1/gifs/search?api_key=#{ENV["GIPHY_KEY"]}&q=pikachu&rating=g")
+		gifbody = JSON.parse(resgif.body)
+
+
+		gif_url = gifbody["data"][0]["url"]
+		id = pokebody ["id"]
+		name = pokebody["name"]
+		types = pokebody["types"]
+
+		render json: {name: name , types: [types] , id: [id]}
 	end
 end
